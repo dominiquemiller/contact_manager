@@ -95,6 +95,16 @@ def import_csv
   main_menu
 end
 
+def export_csv
 
+  CSV.open("myfile.csv", "w") do |csv|
+  csv << ["name", "company", "address", "city", "state", "zipcode", "email", "mobile"]
+  Contact.all.each do |contact|
+    a = contact.name, contact.company, contact.address, contact.city, contact.state, contact.zipcode, contact.email, contact.mobile
+    csv << a
+    end
+  end
+  main_menu
+end
 
 start
