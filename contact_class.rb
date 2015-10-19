@@ -2,7 +2,7 @@ class Contact
   attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile
 
   def initialize
-    @new = create_contact
+
     @name = name
     @company = company
     @address = address
@@ -94,10 +94,26 @@ class Contact
       puts "I did not understand try again!"
       main_menu
     end
-
-
   end
 
-
+  def self.import
+    contacts = CSV.read('./contacts.csv')
+    contact_count = 0
+    contacts.each do |contact|
+      if contact[0]
+        new_contact = Contact.new
+        new_contact.name = contact[0]
+        new_contact.company = contact[1]
+        new_contact.address = contact[2]
+        new_contact.city = contact[3]
+        new_contact.state = contact[4]
+        new_contact.zipcode = contact[5]
+        new_contact.email = contact[6]
+        new_contact.mobile = contact[7]
+      end
+      contact_count += 1
+    end
+    puts "#{contact_count} imported!"
+  end
 
 end

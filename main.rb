@@ -1,4 +1,5 @@
 require_relative "contact_class"
+require "CSV"
 
 def start
   puts <<-EOP
@@ -58,6 +59,11 @@ def update
   Contact.list
   answer = gets.chomp.to_i
   Contact.update(Contact.all[answer - 1])
+  main_menu
+end
+
+def import_csv
+  Contact.import
   main_menu
 end
 
