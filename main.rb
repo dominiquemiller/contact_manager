@@ -22,6 +22,7 @@ def main_menu
                        (L)ist contacts
                        (D)elete contact
                         (N)ew contact
+                            (Q)uit
 
 
   EOP
@@ -41,6 +42,8 @@ def main_menu
       create
     when "l"
       Contact.list
+    when "q"
+      exit
     else
       puts "Sorry I did not understand that!"
       main_menu
@@ -49,14 +52,15 @@ end
 
 def create
   new_contact = Contact.new
+
   puts "Thank you! #{new_contact.name} was created successfully!"
   sleep 1
   main_menu
 end
 
 def update
-  puts "Enter the number of the contact to update."
   Contact.list
+  puts "Enter the number of the contact to update."
   answer = gets.chomp.to_i
   Contact.update(Contact.all[answer - 1])
   main_menu

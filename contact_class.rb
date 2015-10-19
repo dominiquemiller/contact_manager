@@ -2,7 +2,6 @@ class Contact
   attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile
 
   def initialize
-
     @name = name
     @company = company
     @address = address
