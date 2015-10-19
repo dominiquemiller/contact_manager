@@ -8,7 +8,7 @@ class Contact
     @city = city
     @state = state
     @zipcode = zipcode
-    @email  = email
+    @email = email
     @mobile = mobile
   end
 
@@ -113,6 +113,13 @@ class Contact
       contact_count += 1
     end
     puts "#{contact_count} imported!"
+  end
+
+  def self.show(contact)
+    puts "#{contact.name}"
+    puts "#{contact.address}  #{contact.city}, #{contact.state} #{contact.zipcode}"
+    puts "#{contact.email}"
+    puts "#{contact.mobile}"
   end
 
 end
