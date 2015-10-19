@@ -54,7 +54,7 @@ def main_menu
 end
 
 def create
-  new_contact = Contact.create_contact
+  new_contact = Contact.new
   puts "Thank you! #{new_contact.name} was created successfully!"
   sleep 1
   main_menu

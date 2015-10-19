@@ -1,7 +1,7 @@
 class Contact
   attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile
 
-  def initialize
+  def initialize(name = create_contact)
     @name = name
     @company = company
     @address = address
@@ -100,8 +100,7 @@ class Contact
     contact_count = 0
     contacts.each do |contact|
       if contact[0]
-        new_contact = Contact.new
-        new_contact.name = contact[0]
+        new_contact = Contact.new(contact[0])
         new_contact.company = contact[1]
         new_contact.address = contact[2]
         new_contact.city = contact[3]
