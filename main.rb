@@ -1,5 +1,5 @@
 require_relative "contact_class"
-require "CSV"
+require "csv"
 
 def start
   puts <<-EOP
