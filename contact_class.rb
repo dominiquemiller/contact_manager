@@ -1,8 +1,8 @@
 class Contact
-  attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile
+  attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile, :github_user
   @@contact_array = []
 
-  def initialize(name = create_contact)
+  def initialize(name, company, address, city, state, zipcode, email, mobile, github_user)
     @name = name
     @company = company
     @address = address
@@ -11,28 +11,8 @@ class Contact
     @zipcode = zipcode
     @email = email
     @mobile = mobile
+    @github_user = github_user
     @@contact_array << self
-  end
-
-  def create_contact
-    puts "Ok, lets enter some information for your new contact!"
-    sleep 1
-    puts "Please enter your contacts name:"
-      @name = gets.chomp
-    puts "Please enter what company you contact works for:"
-      @company = gets.chomp
-    puts "Please enter the street address:"
-      @address = gets.chomp
-    puts "Please enter the city"
-      @city = gets.chomp
-    puts "Please enter the 2 letter state abbriviation:"
-      @state = gets.chomp
-    puts "Please enter the zip code:"
-      @zip = gets.chomp.to_i
-    puts "Please enter the contacts e-mail:"
-      @email = gets.chomp
-    puts "Please enter a mobile number for your contact:"
-      @mobile = gets.chomp
   end
 
   def self.contact_delete(c)
@@ -102,14 +82,16 @@ class Contact
     contact_count = 0
     contacts.each do |contact|
       if contact[0]
-        new_contact = Contact.new(contact[0])
-        new_contact.company = contact[1]
-        new_contact.address = contact[2]
-        new_contact.city = contact[3]
-        new_contact.state = contact[4]
-        new_contact.zipcode = contact[5]
-        new_contact.email = contact[6]
-        new_contact.mobile = contact[7]
+        name = contact[0]
+        company = contact[1]
+        address = contact[2]
+        city = contact[3]
+        state = contact[4]
+        zipcode = contact[5]
+        email = contact[6]
+        mobile = contact[7]
+        github_user =
+        Contact.new(name, company, address, city, state, zipcode, email, mobile, github_user)
       end
       contact_count += 1
     end

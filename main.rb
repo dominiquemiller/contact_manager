@@ -54,7 +54,27 @@ def main_menu
 end
 
 def create
-  new_contact = Contact.new
+  puts "Ok, lets enter some information for your new contact!"
+  sleep 1
+  puts "Please enter your contacts name:"
+    name = gets.chomp
+  puts "Please enter what company you contact works for:"
+    company = gets.chomp
+  puts "Please enter the street address:"
+    address = gets.chomp
+  puts "Please enter the city"
+    city = gets.chomp
+  puts "Please enter the 2 letter state abbriviation:"
+    state = gets.chomp
+  puts "Please enter the zip code:"
+    zipcode = gets.chomp.to_i
+  puts "Please enter the contacts e-mail:"
+    email = gets.chomp
+  puts "Please enter a mobile number for your contact:"
+    mobile = gets.chomp
+  puts "Please enter GitHub username"
+    github_user = gets.chomp
+  new_contact = Contact.new(name, company, address, city, state, zipcode, email, mobile, github_user)
   puts "Thank you! #{new_contact.name} was created successfully!"
   sleep 1
   main_menu
