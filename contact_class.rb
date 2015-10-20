@@ -90,7 +90,7 @@ class Contact
         zipcode = contact[5]
         email = contact[6]
         mobile = contact[7]
-        github_user =
+        github_user = contact[8]
         Contact.new(name, company, address, city, state, zipcode, email, mobile, github_user)
       end
       contact_count += 1
@@ -103,6 +103,13 @@ class Contact
     puts "#{contact.address}  #{contact.city}, #{contact.state} #{contact.zipcode}"
     puts "#{contact.email}"
     puts "#{contact.mobile}"
+  end
+
+  def self.github_lookup(contact)
+    p user = contact.github_user
+  p response = HTTParty.get("https://api.github.com/users/#{user}")
+    p body = JSON.parse response.body
+    puts "My GitHub id is #{body['id']}"
   end
 
 end

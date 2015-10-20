@@ -1,5 +1,7 @@
 require_relative "contact_class"
 require "csv"
+require 'httparty'
+require 'JSON'
 
 def start
   puts <<-EOP
@@ -23,6 +25,7 @@ def main_menu
                        (S)how contacts
                        (D)elete contact
                         (N)ew contact
+                       (G)ithub Lookup
                             (Q)uit
 
 
@@ -47,6 +50,8 @@ def main_menu
       exit
     when "s"
       show
+    when "g"
+      gitbub_api
     else
       puts "Sorry I did not understand that!"
       main_menu
@@ -119,13 +124,21 @@ end
 def export_csv
 
   CSV.open("myfile.csv", "w") do |csv|
-  csv << ["name", "company", "address", "city", "state", "zipcode", "email", "mobile"]
+  csv << ["name", "company", "address", "city", "state", "zipcode", "email", "mobile", "github"]
   Contact.all.each do |contact|
-    a = contact.name, contact.company, contact.address, contact.city, contact.state, contact.zipcode, contact.email, contact.mobile
+    a = contact.name, contact.company, contact.address, contact.city, contact.state, contact.zipcode, contact.email, contact.mobile, contact.github_user
     csv << a
     end
   end
   main_menu
 end
+
+def gitbub_api
+  Contact.list
+  puts "Enter the number of the contact."
+  answer = gets.chomp.to_i
+  Contact.github_lookup(Contact.all[answer - 1])
+end
+
 
 start
