@@ -1,5 +1,6 @@
 class Contact
   attr_accessor :name, :company, :address, :city, :state, :zipcode, :email, :mobile
+  @@contact_array = []
 
   def initialize(name = create_contact)
     @name = name
@@ -10,6 +11,7 @@ class Contact
     @zipcode = zipcode
     @email = email
     @mobile = mobile
+    @@contact_array << self
   end
 
   def create_contact
@@ -26,27 +28,27 @@ class Contact
     puts "Please enter the 2 letter state abbriviation:"
       @state = gets.chomp
     puts "Please enter the zip code:"
-      @zip = gets.chomp
+      @zip = gets.chomp.to_i
     puts "Please enter the contacts e-mail:"
       @email = gets.chomp
     puts "Please enter a mobile number for your contact:"
       @mobile = gets.chomp
   end
 
+  def self.contact_delete(c)
+    @@contact_array.delete_at(c)
+  end
+
   def self.list
-    if ObjectSpace.each_object(self).to_a.empty?
-      puts "Sorry you have nothing to display!"
-    else
-      i = 1
-      ObjectSpace.each_object(self).to_a.each do |contact|
-        puts "#{i} - #{contact.name}"
-        i += 1
-      end
+    i = 1
+    @@contact_array.each do |contact|
+      puts "#{i} - #{contact.name}"
+      i += 1
     end
   end
 
   def self.all
-    ObjectSpace.each_object(self).to_a
+    @@contact_array
   end
 
   def self.update(contact)

@@ -42,7 +42,7 @@ def main_menu
     when "n"
       create
     when "l"
-      list_contact
+      list_contacts
     when "q"
       exit
     when "s"
@@ -80,12 +80,13 @@ def delete_contact
   Contact.list
   puts "Enter the number of the contact to delete."
   answer = gets.chomp.to_i
-  Contact.all.delete[answer - 1]
-  puts "Contact deleted!"
+  c = answer - 1
+  Contact.contact_delete(c)
+  puts  "You have deleted your contact!"
   main_menu
 end
 
-def list_contact
+def list_contacts
   Contact.list
   main_menu
 end
