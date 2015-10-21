@@ -106,9 +106,9 @@ class Contact
   end
 
   def self.github_lookup(contact)
-    p user = contact.github_user
-  p response = HTTParty.get("https://api.github.com/users/#{user}")
-    p body = JSON.parse response.body
+    user = contact.github_user
+    response = HTTParty.get("https://api.github.com/users/#{user}")
+    body = JSON.parse response.body
     puts "My GitHub id is #{body['id']}"
   end
 

@@ -11,6 +11,8 @@ def start
 
   EOP
 
+
+
   main_menu
 end
 
@@ -30,6 +32,7 @@ def main_menu
 
 
   EOP
+  puts "            #{weather_api}                               "
 
   answer = gets.chomp.downcase
 
@@ -56,6 +59,14 @@ def main_menu
       puts "Sorry I did not understand that!"
       main_menu
   end
+end
+
+def weather_api
+  api_key = '6caa0cf4dc9351c606b054d9e94cdb6f'
+  response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?id=4155966&APPID=#{api_key}")
+  body = JSON.parse response.body
+  weather = body['weather'][0]['description']
+  puts "Today in Ft Lauderdale #{weather}."
 end
 
 def create
