@@ -3,6 +3,8 @@ require "csv"
 require 'httparty'
 require 'JSON'
 
+@all_contacts = []
+
 def start
   puts <<-EOP
   ************************************************************
@@ -23,8 +25,7 @@ def main_menu
                     (I)mport your CSV file
                     (E)xport your contacts
                        (U)pdate contact
-                       (L)ist contacts
-                       (S)how contacts
+                        (S)how contact
                        (D)elete contact
                         (N)ew contact
                        (G)ithub Lookup
@@ -44,11 +45,11 @@ def main_menu
     when "u"
       update
     when "d"
-      delete_contact
+      delete
     when "n"
       create
     when "l"
-      list_contacts
+      list
     when "q"
       exit
     when "s"
@@ -90,47 +91,119 @@ def create
     mobile = gets.chomp
   puts "Please enter GitHub username"
     github_user = gets.chomp
+
   new_contact = Contact.new(name, company, address, city, state, zipcode, email, mobile, github_user)
+  p @all_contacts << new_contact
   puts "Thank you! #{new_contact.name} was created successfully!"
   sleep 1
   main_menu
 end
 
 def update
-  Contact.list
+  list
   puts "Enter the number of the contact to update."
   answer = gets.chomp.to_i
-  Contact.update(Contact.all[answer - 1])
+
+  contact = @all_contacts[answer - 1]
+
+  puts "You chose to update #{contact.name}."
+  puts <<-EOP
+  What would you like to update?
+  (N)ame
+  (C)ompany
+  (A)ddress
+  (C)ity
+  (S)tate
+  (Z)ipcode
+  (E)mail
+  (M)obile
+
+  EOP
+  answer = gets.chomp.downcase
+
+  case answer
+  when "n"
+    puts "please enter a new name:"
+    contact.name = gets.chomp
+  when "c"
+    puts "please enter a new company:"
+    contact.company = gets.chomp
+  when "a"
+    puts "please enter a new street address:"
+    contact.address = gets.chomp
+  when "c"
+    puts "please enter a new city:"
+  when "s"
+    puts "please enter a new state:"
+      contact.state = gets.chomp
+  when "z"
+    puts "please enter a new zipcode"
+    contact.zipcode = gets.chomp
+  when "e"
+    puts "please enter a new e-mail:"
+    contact.email = gets.chomp
+  when "m"
+    puts "please enter a new mobile number:"
+    contact.mobile = gets.chomp
+  else
+    puts "I did not understand try again!"
+    main_menu
+  end
   main_menu
 end
 
 def show
-  Contact.list
+  list
   puts "Enter the number of contact to show"
   answer = gets.chomp.to_i
-  Contact.show(Contact.all[answer - 1])
+  contact = @all_contacts[answer - 1]
+  puts "#{contact.name}"
+  puts "#{contact.address}  #{contact.city}, #{contact.state} #{contact.zipcode}"
+  puts "#{contact.email}"
+  puts "#{contact.mobile}"
   main_menu
 end
 
-def delete_contact
-  Contact.list
+def delete
+  list
   puts "Enter the number of the contact to delete."
   answer = gets.chomp.to_i
   c = answer - 1
-  Contact.contact_delete(c)
+  @all_contacts.delete_at[c]
   puts  "You have deleted your contact!"
   main_menu
 end
 
-def list_contacts
-  Contact.list
-  main_menu
+def list
+  i = 1
+  @all_contacts.each do |contact|
+    puts "#{i} - #{contact.name}"
+    i += 1
+  end
 end
 
 def import_csv
-  Contact.import
+  contacts = CSV.read('./contacts.csv')
+  contact_count = 0
+  contacts.each do |contact|
+    if contact[0]
+      name = contact[0]
+      company = contact[1]
+      address = contact[2]
+      city = contact[3]
+      state = contact[4]
+      zipcode = contact[5]
+      email = contact[6]
+      mobile = contact[7]
+      github_user = contact[8]
+      @all_contacts << Contact.new(name, company, address, city, state, zipcode, email, mobile, github_user)
+    end
+    contact_count += 1
+  end
+  puts "#{contact_count} imported!"
   main_menu
 end
+
 
 def export_csv
 
@@ -145,10 +218,15 @@ def export_csv
 end
 
 def gitbub_api
-  Contact.list
+  list
   puts "Enter the number of the contact."
   answer = gets.chomp.to_i
-  Contact.github_lookup(Contact.all[answer - 1])
+  user = @all_contacts[answer - 1]
+  user = user.github_user
+  response = HTTParty.get("https://api.github.com/users/#{user}")
+  body = JSON.parse response.body
+  puts "My GitHub id is #{body['id']}"
+  main_menu
 end
 
 
