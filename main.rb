@@ -119,8 +119,7 @@ module Main
   def update
     list
     puts "Enter the number of the contact to update."
-    answer = gets.chomp.to_i
-
+    answer = validate_index
     contact = @@all_contacts[answer - 1]
 
     puts "You chose to update #{contact.name}."
@@ -172,7 +171,7 @@ module Main
   def show
     list
     puts "Enter the number of contact to show"
-    answer = gets.chomp.to_i
+    answer = validate_index
     contact = @@all_contacts[answer - 1]
     puts "#{contact.name}"
     puts "#{contact.address}  #{contact.city}, #{contact.state} #{contact.zipcode}"
@@ -184,7 +183,7 @@ module Main
   def delete
     list
     puts "Enter the number of the contact to delete."
-    answer = gets.chomp.to_i
+    answer = validate_index
     c = answer - 1
     @@all_contacts.delete_at[c]
     puts  "You have deleted your contact!"
@@ -204,6 +203,15 @@ module Main
         i += 1
       end
     end
+  end
+
+  def validate_index
+    answer = gets.chomp.to_i
+    while answer.zero? || answer > @@all_contacts.length
+      puts "That is not a valid entry. Please try again"
+      answer = gets.chomp.to_i
+    end
+    answer
   end
 
   def import_csv
@@ -242,7 +250,7 @@ module Main
   def gitbub_api
     list
     puts "Enter the number of the contact."
-    answer = gets.chomp.to_i
+    answer = validate_index
     user = @@all_contacts[answer - 1]
     user = user.github_user
     response = HTTParty.get("https://api.github.com/users/#{user}")
