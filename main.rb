@@ -2,6 +2,7 @@ require_relative "contact_class"
 require "csv"
 require 'httparty'
 require 'JSON'
+require 'sendgrid-ruby'
 
 module Main
 
@@ -29,7 +30,8 @@ module Main
                           (D)elete contact
                           (G)ithub Lookup
                       (I)mport your CSV file
-                      (E)xport your contacts
+                        (O)utput to CSV file
+                         (E)mail a contact
                               (Q)uit
 
 
@@ -39,7 +41,7 @@ module Main
     case answer
       when "i"
         import_csv
-      when "e"
+      when "o"
         export_csv
       when "u"
         update
@@ -47,14 +49,14 @@ module Main
         delete
       when "n"
         create
-      when "l"
-        list
       when "q"
         exit
       when "s"
         show
       when "g"
         gitbub_api
+      when "e"
+        sendgrid_api
       else
         puts "Sorry I did not understand that!"
         main_menu
@@ -190,7 +192,7 @@ module Main
       end
     end
   end
-  
+
   def state_validation
     state = gets.chomp
     until state.length == 2
@@ -277,9 +279,31 @@ module Main
     user = user.github_user
     response = HTTParty.get("https://api.github.com/users/#{user}")
     body = JSON.parse response.body
-    p body
     puts "My GitHub id is #{body['id']}"
     main_menu
+  end
+
+  def sendgrid_api
+    list
+    puts "Enter the number of the contact to e-mail."
+    answer = validate_index
+    user = @@all_contacts[answer - 1]
+    puts "Please enter the subject of the e-mail:"
+    subject = gets.chomp.to_s
+    puts "Please enter a messege to your user"
+    body = gets.chomp.to_s
+
+    client = SendGrid::Client.new(api_user: "", api_key: "")
+
+    email = SendGrid::Mail.new do |m|
+      m.to      = "#{user}"
+      m.from    = 'anyemailyouwant@gmail.com'
+      m.subject = "#{subject}"
+      m.text    = "#{body}"
+    end
+
+    client.send(email)
+    puts "Your email has been sent!"
   end
 end
 
