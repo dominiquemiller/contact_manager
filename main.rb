@@ -82,29 +82,13 @@ module Main
     puts "Please enter the city"
       city = gets.chomp
     puts "Please enter the 2 letter state abbriviation:"
-      state = gets.chomp
-    until state.length == 2
-      puts "Please ensure you use the state 2 letter abbreviation!"
-      state = gets.chomp
-    end
+      state = state_validation
     puts "Please enter the zip code:"
-      zipcode = gets.chomp.to_i
-    until zipcode.to_s.length.between?(5,9)
-      puts "Please ensure the zip code is between 5 and 9 digits!"
-      zipcode = gets.chomp.to_i
-    end
+      zipcode = zip_validation
     puts "Please enter the contacts e-mail:"
-      email = gets.chomp
-    until email.include?("@") && email.include?(".")
-      puts "Not a valid email format, please try again"
-      email = gets.chomp
-    end
+      email = email_validation
     puts "Please enter a mobile number for your contact:"
-      mobile = gets.chomp
-    until mobile == mobile.to_i.to_s && mobile.size > 6
-      puts "Not a valid phone number format, please use at least 7 numerical characters only."
-      mobile = gets.chomp
-    end
+      mobile = mobile_validation
     puts "Please enter GitHub username"
       github_user = gets.chomp
 
@@ -151,16 +135,16 @@ module Main
       puts "please enter a new city:"
     when "s"
       puts "please enter a new state:"
-        contact.state = gets.chomp
+        contact.state = state_validation
     when "z"
       puts "please enter a new zipcode"
-      contact.zipcode = gets.chomp
+      contact.zipcode = zip_validation
     when "e"
       puts "please enter a new e-mail:"
-      contact.email = gets.chomp
+      contact.email = email_validation
     when "m"
       puts "please enter a new mobile number:"
-      contact.mobile = gets.chomp
+      contact.mobile = mobile_validation
     else
       puts "I did not understand try again!"
       main_menu
@@ -185,8 +169,10 @@ module Main
     puts "Enter the number of the contact to delete."
     answer = validate_index
     c = answer - 1
-    @@all_contacts.delete_at[c]
-    puts  "You have deleted your contact!"
+    sleep 1
+    system('clear')
+    puts  "You have deleted your contact #{@@all_contacts[c].name}!"
+    @@all_contacts.delete_at(c)
     main_menu
   end
 
@@ -203,6 +189,42 @@ module Main
         i += 1
       end
     end
+  end
+  
+  def state_validation
+    state = gets.chomp
+    until state.length == 2
+      puts "Please ensure you use the state 2 letter abbreviation!"
+      state = gets.chomp
+    end
+    state
+  end
+
+  def zip_validation
+    zipcode = gets.chomp.to_i
+    until zipcode.to_s.length.between?(5,9)
+      puts "Please ensure the zip code is between 5 and 9 digits!"
+      zipcode = gets.chomp.to_i
+    end
+    zipcode
+  end
+
+  def email_validation
+    email = gets.chomp
+    until email.include?("@") && email.include?(".")
+      puts "Not a valid email format, please try again"
+      email = gets.chomp
+    end
+    email
+  end
+
+  def mobile_validation
+    mobile = gets.chomp
+    until mobile == mobile.to_i.to_s && mobile.size.between?(7,15)
+      puts "Not a valid phone number format, please use between 7 and 15 numerical characters only."
+      mobile = gets.chomp
+    end
+    mobile
   end
 
   def validate_index
