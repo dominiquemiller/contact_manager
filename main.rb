@@ -192,10 +192,17 @@ module Main
   end
 
   def list
-    i = 1
-    @@all_contacts.each do |contact|
-      puts "#{i} - #{contact.name}"
-      i += 1
+    if @@all_contacts.empty?
+      system("clear")
+      puts "===========There are no contacts to in your address book==========="
+      sleep 1
+      main_menu
+    else
+      i = 1
+      @@all_contacts.each do |contact|
+        puts "#{i} - #{contact.name}"
+        i += 1
+      end
     end
   end
 
@@ -240,6 +247,7 @@ module Main
     user = user.github_user
     response = HTTParty.get("https://api.github.com/users/#{user}")
     body = JSON.parse response.body
+    p body
     puts "My GitHub id is #{body['id']}"
     main_menu
   end
